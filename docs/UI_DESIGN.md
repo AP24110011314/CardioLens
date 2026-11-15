@@ -5,8 +5,12 @@ Calm, clinical-but-friendly · one clear primary action · plain language · nev
 
 ## 2. Page setup
 ```python
-st.set_page_config(page_title="CardioLens", page_icon="❤️", layout="wide",
-                   initial_sidebar_state="expanded")
+st.set_page_config(
+    page_title="CardioLens",
+    page_icon="❤️",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 ```
 Replace the current title `Heart Disease Prediction App by Aman☠️` with a heart icon title; move "by Aman" to the footer/About page.
 

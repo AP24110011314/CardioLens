@@ -78,11 +78,11 @@ def predict_batch(df_prepared: pd.DataFrame) -> pd.DataFrame:
     probas = model.predict_proba(df_prepared)[:, 1]
     labels = model.predict(df_prepared)
 
-    results = pd.DataFrame({
-        "Probability": np.round(probas, 4),
-        "Label": labels.astype(int),
-    })
-    results["Risk_Band"] = results["Probability"].apply(
-        lambda p: get_risk_band(p)[0]
+    results = pd.DataFrame(
+        {
+            "Probability": np.round(probas, 4),
+            "Label": labels.astype(int),
+        }
     )
+    results["Risk_Band"] = results["Probability"].apply(lambda p: get_risk_band(p)[0])
     return results

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from src.predict import get_risk_band
 
 
@@ -11,7 +9,7 @@ class TestGetRiskBand:
     """Verify risk band thresholds."""
 
     def test_low_at_zero(self) -> None:
-        label, colour, msg = get_risk_band(0.0)
+        label, _colour, _msg = get_risk_band(0.0)
         assert label == "Low"
 
     def test_low_at_boundary(self) -> None:

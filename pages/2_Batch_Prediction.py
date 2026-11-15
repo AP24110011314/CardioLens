@@ -5,8 +5,6 @@ Upload a CSV, validate, score all rows, download results.
 
 from __future__ import annotations
 
-import io
-
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -24,7 +22,9 @@ st.caption("Upload a CSV with patient data to score multiple rows at once.")
 # Template download
 # ---------------------------------------------------------------------------
 st.markdown("##### 1. Download the template")
-st.caption("Use this CSV template to ensure your file has the correct columns and format.")
+st.caption(
+    "Use this CSV template to ensure your file has the correct columns and format."
+)
 
 template_df = pd.DataFrame(
     {feat: [FEATURES[feat]["default"]] for feat in FEATURE_ORDER}
@@ -43,8 +43,17 @@ col_descriptions = []
 for feat in FEATURE_ORDER:
     spec = FEATURES[feat]
     label = spec["label"]
-    if feat in ("Sex", "ChestPainType", "RestingECG", "ST_Slope", "ExerciseAngina", "FastingBS"):
-        col_descriptions.append(f"- `{feat}` — integer-encoded (see Model Info page for codes)")
+    if feat in (
+        "Sex",
+        "ChestPainType",
+        "RestingECG",
+        "ST_Slope",
+        "ExerciseAngina",
+        "FastingBS",
+    ):
+        col_descriptions.append(
+            f"- `{feat}` — integer-encoded (see Model Info page for codes)"
+        )
     elif "min" in spec and "max" in spec:
         col_descriptions.append(f"- `{feat}` — {spec['min']} to {spec['max']}")
     else:
@@ -68,7 +77,7 @@ uploaded_file = st.file_uploader(
 if uploaded_file is not None:
     try:
         df = pd.read_csv(uploaded_file)
-    except Exception as e:
+    except (ValueError, pd.errors.EmptyDataError, pd.errors.ParserError, OSError) as e:
         st.error(f"Could not read file: {e}")
         st.stop()
 
@@ -127,7 +136,9 @@ if uploaded_file is not None:
         plot_bgcolor="rgba(0,0,0,0)",
         legend_title_text="",
     )
-    st.plotly_chart(fig, key="batch_histogram", alt="Batch prediction probability distribution")
+    st.plotly_chart(
+        fig, key="batch_histogram", alt="Batch prediction probability distribution"
+    )
 
     # Data table
     st.dataframe(

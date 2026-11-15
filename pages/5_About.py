@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from src.config import DISCLAIMER, FEATURES
-from src.ui import render_disclaimer, render_footer
+from src.config import FEATURES
+from src.ui import render_disclaimer
 
 st.title("About CardioLens")
 
@@ -32,9 +32,7 @@ st.markdown("##### Understanding the inputs")
 st.caption("A plain-language explanation of each clinical value used by the model.")
 
 explanations = {
-    "Age": (
-        "Your age in years. Heart disease risk generally increases with age."
-    ),
+    "Age": ("Your age in years. Heart disease risk generally increases with age."),
     "Sex": (
         "Biological sex (Male / Female). The dataset shows different risk distributions by sex, "
         "but this reflects the training data, not a universal rule."
@@ -122,6 +120,8 @@ st.markdown("""
 # Built by
 # ---------------------------------------------------------------------------
 st.divider()
-st.markdown("**Built by Aman** as a portfolio project demonstrating applied machine learning with Streamlit.")
+st.markdown(
+    "**Built by Aman** as a portfolio project demonstrating applied machine learning with Streamlit."
+)
 
 render_disclaimer()

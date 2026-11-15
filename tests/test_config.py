@@ -9,7 +9,14 @@ class TestEncodingMaps:
     """Verify encoding/decoding consistency."""
 
     def test_all_categorical_features_have_encodings(self) -> None:
-        categorical = ["Sex", "ChestPainType", "RestingECG", "ST_Slope", "ExerciseAngina", "FastingBS"]
+        categorical = [
+            "Sex",
+            "ChestPainType",
+            "RestingECG",
+            "ST_Slope",
+            "ExerciseAngina",
+            "FastingBS",
+        ]
         for feat in categorical:
             assert feat in ENCODINGS, f"Missing encoding for {feat}"
 

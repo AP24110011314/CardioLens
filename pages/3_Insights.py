@@ -35,9 +35,7 @@ else:
         st.markdown("##### Risk trend")
         # Parse probability back to float
         history_df["prob_float"] = (
-            history_df["Probability"]
-            .str.replace("%", "")
-            .astype(float) / 100
+            history_df["Probability"].str.replace("%", "").astype(float) / 100
         )
         fig = px.line(
             history_df,
@@ -54,17 +52,31 @@ else:
             plot_bgcolor="rgba(0,0,0,0)",
             yaxis={"range": [0, 1], "tickformat": ".0%"},
         )
-        fig.add_hline(y=0.30, line_dash="dot", line_color=COLORS["low"], annotation_text="Low/Moderate")
-        fig.add_hline(y=0.60, line_dash="dot", line_color=COLORS["moderate"], annotation_text="Moderate/High")
+        fig.add_hline(
+            y=0.30,
+            line_dash="dot",
+            line_color=COLORS["low"],
+            annotation_text="Low/Moderate",
+        )
+        fig.add_hline(
+            y=0.60,
+            line_dash="dot",
+            line_color=COLORS["moderate"],
+            annotation_text="Moderate/High",
+        )
         st.plotly_chart(fig, key="history_trend", alt="Prediction history trend line")
 
     # Data table
-    st.dataframe(history_df.drop(columns=["prob_float"], errors="ignore"), hide_index=True)
+    st.dataframe(
+        history_df.drop(columns=["prob_float"], errors="ignore"), hide_index=True
+    )
 
     # Export and clear
     action_col1, action_col2 = st.columns(2)
     with action_col1:
-        csv_export = history_df.drop(columns=["prob_float"], errors="ignore").to_csv(index=False)
+        csv_export = history_df.drop(columns=["prob_float"], errors="ignore").to_csv(
+            index=False
+        )
         st.download_button(
             ":material/download: Export history CSV",
             data=csv_export,
@@ -74,7 +86,9 @@ else:
             width="stretch",
         )
     with action_col2:
-        if st.button("Clear history", key="clear_history", type="secondary", width="stretch"):
+        if st.button(
+            "Clear history", key="clear_history", type="secondary", width="stretch"
+        ):
             st.session_state["history"] = []
             st.session_state["last_inputs"] = None
             st.session_state["last_result"] = None

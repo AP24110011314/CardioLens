@@ -94,7 +94,7 @@ def generate_pdf_report(
     elements.append(
         Paragraph(
             f"<b>Risk probability:</b> {result['proba'] * 100:.1f}% "
-            f"&nbsp;&nbsp; <b>Risk band:</b> {result['band']}",
+            f"&nbsp;&nbsp; <b>Risk band:</b> <font color='{band_color}'><b>{result['band']}</b></font>",
             body_style,
         )
     )
@@ -121,7 +121,12 @@ def generate_pdf_report(
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
                 ("TOPPADDING", (0, 0), (-1, -1), 6),
                 ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#2A313C")),
-                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#0E1117"), colors.HexColor("#161B22")]),
+                (
+                    "ROWBACKGROUNDS",
+                    (0, 1),
+                    (-1, -1),
+                    [colors.HexColor("#0E1117"), colors.HexColor("#161B22")],
+                ),
                 ("TEXTCOLOR", (0, 1), (-1, -1), colors.HexColor("#E6EDF3")),
             ]
         )
@@ -134,11 +139,13 @@ def generate_pdf_report(
         elements.append(Paragraph("Key factors", heading_style))
         factor_data = [["Factor", "Your value", "Δ Risk"]]
         for _, row in sensitivity_df.head(5).iterrows():
-            factor_data.append([
-                str(row["Feature"]),
-                str(row["Your value"]),
-                f"{row['Δ Risk']:+.1%}",
-            ])
+            factor_data.append(
+                [
+                    str(row["Feature"]),
+                    str(row["Your value"]),
+                    f"{row['Δ Risk']:+.1%}",
+                ]
+            )
         factor_table = Table(factor_data, colWidths=[6 * cm, 5 * cm, 5 * cm])
         factor_table.setStyle(
             TableStyle(

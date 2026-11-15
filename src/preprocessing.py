@@ -7,7 +7,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import numpy as np
 import pandas as pd
 
 from src.config import ENCODINGS, FEATURE_ORDER
@@ -150,8 +149,17 @@ def prepare_batch(
         return df, errors
 
     # Integer-typed columns
-    int_cols = ["Age", "Sex", "ChestPainType", "RestingBP", "Cholesterol",
-                "FastingBS", "RestingECG", "ExerciseAngina", "ST_Slope"]
+    int_cols = [
+        "Age",
+        "Sex",
+        "ChestPainType",
+        "RestingBP",
+        "Cholesterol",
+        "FastingBS",
+        "RestingECG",
+        "ExerciseAngina",
+        "ST_Slope",
+    ]
     for col in int_cols:
         if col in df.columns:
             df[col] = df[col].astype(int)

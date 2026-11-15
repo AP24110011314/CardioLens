@@ -6,12 +6,9 @@ from src.model_loader import (
     get_cholesterol_median,
     load_artifacts,
     load_columns,
-    load_model,
     load_model_metrics,
     load_reference_data,
-    load_scaler,
 )
-from src.config import CHOLESTEROL_MEDIAN_FALLBACK
 
 
 class TestModelLoader:

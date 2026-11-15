@@ -5,8 +5,13 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from src.config import ENCODINGS, FEATURE_ORDER
-from src.preprocessing import build_frame, encode_value, decode_value, impute_cholesterol
+from src.config import FEATURE_ORDER
+from src.preprocessing import (
+    build_frame,
+    decode_value,
+    encode_value,
+    impute_cholesterol,
+)
 
 
 class TestEncodeValue:

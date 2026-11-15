@@ -8,10 +8,9 @@ from __future__ import annotations
 
 import numpy as np
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 
-from src.config import COLORS, DECODINGS, ENCODINGS, FEATURE_ORDER, FEATURES
+from src.config import COLORS, ENCODINGS, FEATURES
 from src.model_loader import load_artifacts, load_model_metrics, load_reference_data
 from src.ui import render_disclaimer
 
@@ -70,7 +69,7 @@ if metrics is not None:
         cm_array = np.array(cm)
         fig = px.imshow(
             cm_array,
-            labels=dict(x="Predicted", y="Actual", color="Count"),
+            labels={"x": "Predicted", "y": "Actual", "color": "Count"},
             x=["No disease", "Heart disease"],
             y=["No disease", "Heart disease"],
             color_continuous_scale=[[0, COLORS["surface"]], [1, COLORS["primary"]]],
@@ -125,7 +124,9 @@ else:
 # Encoding reference
 # ---------------------------------------------------------------------------
 st.markdown("##### Feature encoding reference")
-st.caption("These are the internal integer codes used by the model for categorical features.")
+st.caption(
+    "These are the internal integer codes used by the model for categorical features."
+)
 
 for feat_name, mapping in ENCODINGS.items():
     if feat_name == "FastingBS":

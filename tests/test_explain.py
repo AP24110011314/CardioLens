@@ -42,4 +42,6 @@ class TestExplain:
         assert "modified_proba" in wi
         assert "delta" in wi
         assert isinstance(wi["delta"], float)
-        assert wi["delta"] == pytest.approx(wi["modified_proba"] - wi["original_proba"], abs=1e-5)
+        assert wi["delta"] == pytest.approx(
+            wi["modified_proba"] - wi["original_proba"], abs=1e-5
+        )

@@ -9,14 +9,11 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-import pandas as pd
 import plotly.express as px
 import streamlit as st
 
 from src.config import (
     COLORS,
-    DISCLAIMER,
-    ENCODINGS,
     FEATURE_GROUPS,
     FEATURE_ORDER,
     FEATURES,
@@ -39,14 +36,16 @@ if "last_result" not in st.session_state:
     st.session_state["last_result"] = None
 
 st.title("Heart disease risk prediction")
-st.caption("Enter your clinical values below and click **Predict risk** to see your estimated risk.")
+st.caption(
+    "Enter your clinical values below and click **Predict risk** to see your estimated risk."
+)
 
 # ---------------------------------------------------------------------------
 # Input form
 # ---------------------------------------------------------------------------
 form_col, result_col = st.columns([3, 2], gap="large")
 
-with form_col:
+with form_col:  # noqa: SIM117
     with st.form("predict_form"):
         for group_name, features in FEATURE_GROUPS.items():
             st.markdown(f"**{group_name}**")
@@ -63,7 +62,10 @@ with form_col:
                             help="If checked, a typical value from the training data will be used.",
                         )
                         if chol_unknown:
-                            st.info("A median reference value will be used in the prediction.", icon=":material/info:")
+                            st.info(
+                                "A median reference value will be used in the prediction.",
+                                icon=":material/info:",
+                            )
                             cholesterol_val: int | float = 0  # will be imputed
                         else:
                             cholesterol_val = st.number_input(
@@ -99,12 +101,16 @@ with form_col:
                         st.selectbox(
                             spec["label"],
                             options=spec["options"],
-                            index=spec["options"].index(spec["default"]) if spec["default"] in spec["options"] else 0,
+                            index=spec["options"].index(spec["default"])
+                            if spec["default"] in spec["options"]
+                            else 0,
                             help=spec["help"],
                             key=f"input_{feat_name}",
                         )
 
-        submitted = st.form_submit_button("Predict risk", type="primary", width="stretch")
+        submitted = st.form_submit_button(
+            "Predict risk", type="primary", width="stretch"
+        )
 
 # ---------------------------------------------------------------------------
 # Collect inputs and predict
@@ -115,12 +121,14 @@ if submitted:
         if feat_name == "Cholesterol":
             inputs[feat_name] = cholesterol_val  # type: ignore[possibly-undefined]
         else:
-            inputs[feat_name] = st.session_state.get(f"input_{feat_name}", FEATURES[feat_name]["default"])
+            inputs[feat_name] = st.session_state.get(
+                f"input_{feat_name}", FEATURES[feat_name]["default"]
+            )
 
     with st.spinner("Predicting..."):
         try:
             result = predict_single(inputs)
-        except Exception as e:
+        except (ValueError, KeyError, RuntimeError) as e:
             st.error(f"Prediction failed: {e}")
             st.stop()
 
@@ -136,7 +144,9 @@ if submitted:
     }
     st.session_state["history"].append(entry)
 
-    st.toast(f"Prediction complete: {result['band']} risk ({result['proba']:.0%})", icon="❤️")
+    st.toast(
+        f"Prediction complete: {result['band']} risk ({result['proba']:.0%})", icon="❤️"
+    )
 
 # ---------------------------------------------------------------------------
 # Result panel
@@ -175,12 +185,14 @@ if result is not None and inputs is not None:
     # Tabs: key factors, what-if, similar patients, compare
     # -----------------------------------------------------------------------
     st.divider()
-    tab_factors, tab_whatif, tab_similar, tab_compare = st.tabs([
-        ":material/bar_chart: Key factors",
-        ":material/swap_horiz: What-if",
-        ":material/group: Similar patients",
-        ":material/compare: Compare with population",
-    ])
+    tab_factors, tab_whatif, tab_similar, tab_compare = st.tabs(
+        [
+            ":material/bar_chart: Key factors",
+            ":material/swap_horiz: What-if",
+            ":material/group: Similar patients",
+            ":material/compare: Compare with population",
+        ]
+    )
 
     # --- Tab: Key factors ---
     with tab_factors:
@@ -213,7 +225,9 @@ if result is not None and inputs is not None:
             st.plotly_chart(fig, key="factors_chart", alt="Key factors bar chart")
             render_disclaimer()
         else:
-            st.info("Your inputs are already at the reference values — no sensitivity to show.")
+            st.info(
+                "Your inputs are already at the reference values — no sensitivity to show."
+            )
 
     # --- Tab: What-if ---
     with tab_whatif:
@@ -228,7 +242,9 @@ if result is not None and inputs is not None:
                 "Max heart rate",
                 min_value=50,
                 max_value=220,
-                value=int(inputs["MaxHR"]) if isinstance(inputs["MaxHR"], (int, float)) else 150,
+                value=int(inputs["MaxHR"])
+                if isinstance(inputs["MaxHR"], (int, float))
+                else 150,
                 key="wi_maxhr",
             )
             if wi_maxhr != inputs["MaxHR"]:
@@ -243,9 +259,7 @@ if result is not None and inputs is not None:
                 key="wi_chol",
             )
             chol_input = inputs["Cholesterol"]
-            if chol_input == 0:
-                changes["Cholesterol"] = wi_chol
-            elif wi_chol != chol_input:
+            if chol_input == 0 or wi_chol != chol_input:
                 changes["Cholesterol"] = wi_chol
 
         with whatif_cols[2]:
@@ -265,10 +279,14 @@ if result is not None and inputs is not None:
             delta = wi_result["delta"]
             col_orig, col_arrow, col_new = st.columns([2, 1, 2])
             with col_orig:
-                st.metric("Original risk", f"{wi_result['original_proba']:.0%}", help=wi_result["original_band"])
+                st.metric(
+                    "Original risk",
+                    f"{wi_result['original_proba']:.0%}",
+                    help=wi_result["original_band"],
+                )
             with col_arrow:
                 st.markdown(
-                    f"<div style='text-align:center; font-size:2rem; padding-top:1rem;'>→</div>",
+                    "<div style='text-align:center; font-size:2rem; padding-top:1rem;'>→</div>",
                     unsafe_allow_html=True,
                 )
             with col_new:
@@ -301,7 +319,9 @@ if result is not None and inputs is not None:
                     "HeartDisease": st.column_config.TextColumn("Heart disease"),
                 },
             )
-            st.caption(f"Showing {total} nearest neighbours from the reference dataset (Euclidean distance in scaled space).")
+            st.caption(
+                f"Showing {total} nearest neighbours from the reference dataset (Euclidean distance in scaled space)."
+            )
             render_disclaimer()
         else:
             st.warning(
@@ -326,10 +346,15 @@ if result is not None and inputs is not None:
                 fig = px.histogram(
                     ref_df[ref_df[feat] > 0] if feat == "Cholesterol" else ref_df,
                     x=feat,
-                    color=ref_df["HeartDisease"].map({0: "No disease", 1: "Heart disease"}),
+                    color=ref_df["HeartDisease"].map(
+                        {0: "No disease", 1: "Heart disease"}
+                    ),
                     barmode="overlay",
                     opacity=0.6,
-                    color_discrete_map={"No disease": COLORS["low"], "Heart disease": COLORS["high"]},
+                    color_discrete_map={
+                        "No disease": COLORS["low"],
+                        "Heart disease": COLORS["high"],
+                    },
                     labels={feat: FEATURES.get(feat, {}).get("label", feat)},
                 )
                 fig.add_vline(
@@ -346,7 +371,9 @@ if result is not None and inputs is not None:
                     plot_bgcolor="rgba(0,0,0,0)",
                     legend_title_text="",
                 )
-                st.plotly_chart(fig, key=f"compare_{feat}", alt=f"{feat} distribution comparison")
+                st.plotly_chart(
+                    fig, key=f"compare_{feat}", alt=f"{feat} distribution comparison"
+                )
             render_disclaimer()
         else:
             st.warning(
@@ -357,10 +384,12 @@ if result is not None and inputs is not None:
 
 else:
     # Empty state — before first prediction
-    with result_col:
+    with result_col:  # noqa: SIM117
         with st.container(border=True):
             st.markdown("#### Results will appear here")
-            st.caption("Fill in the form and click **Predict risk** to see your estimated heart disease risk.")
+            st.caption(
+                "Fill in the form and click **Predict risk** to see your estimated heart disease risk."
+            )
 
             if st.button("Try an example", key="example_btn"):
                 for feat_name, ref_val in REFERENCE_VALUES.items():

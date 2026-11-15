@@ -13,20 +13,20 @@ from __future__ import annotations
 ENCODINGS: dict[str, dict[str, int]] = {
     "Sex": {"Male": 1, "Female": 0},
     "ChestPainType": {
-        "Typical angina": 0,       # TA
-        "Atypical angina": 1,      # ATA
-        "Non-anginal pain": 2,     # NAP
+        "Typical angina": 0,  # TA
+        "Atypical angina": 1,  # ATA
+        "Non-anginal pain": 2,  # NAP
         "No symptoms (asymptomatic)": 3,  # ASY
     },
     "RestingECG": {
         "Left ventricular hypertrophy": 0,  # LVH
         "Normal": 1,
-        "ST-T wave abnormality": 2,         # ST
+        "ST-T wave abnormality": 2,  # ST
     },
     "ST_Slope": {
-        "Downsloping": 0,   # Down
+        "Downsloping": 0,  # Down
         "Flat": 1,
-        "Upsloping": 2,     # Up
+        "Upsloping": 2,  # Up
     },
     "ExerciseAngina": {"No": 0, "Yes": 1},
     "FastingBS": {"≤ 120 mg/dL": 0, "> 120 mg/dL": 1},
@@ -43,8 +43,16 @@ DECODINGS: dict[str, dict[int, str]] = {
 # ---------------------------------------------------------------------------
 
 FEATURE_ORDER: list[str] = [
-    "Age", "Sex", "ChestPainType", "RestingBP", "Cholesterol",
-    "FastingBS", "RestingECG", "MaxHR", "ExerciseAngina", "Oldpeak",
+    "Age",
+    "Sex",
+    "ChestPainType",
+    "RestingBP",
+    "Cholesterol",
+    "FastingBS",
+    "RestingECG",
+    "MaxHR",
+    "ExerciseAngina",
+    "Oldpeak",
     "ST_Slope",
 ]
 
@@ -52,7 +60,13 @@ FEATURE_ORDER: list[str] = [
 FEATURE_GROUPS: dict[str, list[str]] = {
     "Personal": ["Age", "Sex"],
     "Vitals": ["RestingBP", "Cholesterol", "FastingBS", "MaxHR"],
-    "Cardiac tests": ["ChestPainType", "RestingECG", "ExerciseAngina", "Oldpeak", "ST_Slope"],
+    "Cardiac tests": [
+        "ChestPainType",
+        "RestingECG",
+        "ExerciseAngina",
+        "Oldpeak",
+        "ST_Slope",
+    ],
 }
 
 # Per-feature metadata

@@ -36,13 +36,15 @@ def sensitivity_analysis(
         delta = result["proba"] - base_proba
 
         feature_label = FEATURES.get(feature, {}).get("label", feature)
-        rows.append({
-            "Feature": feature_label,
-            "Your value": _display_value(feature, inputs[feature]),
-            "Reference value": _display_value(feature, ref_value),
-            "Δ Risk": round(delta, 4),
-            "Direction": "↓ lower risk" if delta < 0 else "↑ higher risk",
-        })
+        rows.append(
+            {
+                "Feature": feature_label,
+                "Your value": _display_value(feature, inputs[feature]),
+                "Reference value": _display_value(feature, ref_value),
+                "Δ Risk": round(delta, 4),
+                "Direction": "↓ lower risk" if delta < 0 else "↑ higher risk",
+            }
+        )
 
     df = pd.DataFrame(rows)
     if len(df) > 0:
@@ -105,7 +107,7 @@ def find_neighbours(
 
     model, scaler, model_columns, scaler_columns = load_artifacts()
 
-    from src.preprocessing import build_and_prepare, build_frame, prepare
+    from src.preprocessing import build_and_prepare
 
     # Prepare the user input
     user_prepared = build_and_prepare(inputs, model_columns, scaler, scaler_columns)
@@ -114,12 +116,15 @@ def find_neighbours(
     ref_features = ref_df[model_columns].copy()
     # Impute cholesterol in reference data
     from src.model_loader import get_cholesterol_median
+
     chol_median = get_cholesterol_median()
     ref_features["Cholesterol"] = ref_features["Cholesterol"].replace(0, chol_median)
     ref_features[scaler_columns] = scaler.transform(ref_features[scaler_columns])
 
     # Find nearest neighbours
-    distances, indices = model.kneighbors(user_prepared, n_neighbors=min(k, len(ref_features)))
+    distances, indices = model.kneighbors(
+        user_prepared, n_neighbors=min(k, len(ref_features))
+    )
 
     neighbour_rows = ref_df.iloc[indices[0]].copy()
     neighbour_rows = neighbour_rows.reset_index(drop=True)

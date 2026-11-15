@@ -42,11 +42,17 @@ df["Cholesterol"] = df["Cholesterol"].replace(0, chol_med)
 df = df[df.RestingBP > 0]
 
 X, y = df.drop(columns="HeartDisease"), df["HeartDisease"]
-num = ["Age","RestingBP","Cholesterol","MaxHR","Oldpeak"]
-cat = ["Sex","ChestPainType","FastingBS","RestingECG","ExerciseAngina","ST_Slope"]
-pre = ColumnTransformer([("num", StandardScaler(), num),
-                         ("cat", OneHotEncoder(handle_unknown="ignore"), cat)])
-pipe = Pipeline([("pre", pre), ("clf", KNeighborsClassifier(n_neighbors=7, weights="distance"))])
+num = ["Age", "RestingBP", "Cholesterol", "MaxHR", "Oldpeak"]
+cat = ["Sex", "ChestPainType", "FastingBS", "RestingECG", "ExerciseAngina", "ST_Slope"]
+pre = ColumnTransformer(
+    [
+        ("num", StandardScaler(), num),
+        ("cat", OneHotEncoder(handle_unknown="ignore"), cat),
+    ]
+)
+pipe = Pipeline(
+    [("pre", pre), ("clf", KNeighborsClassifier(n_neighbors=7, weights="distance"))]
+)
 
 Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 pipe.fit(Xtr, ytr)
@@ -54,11 +60,17 @@ proba = pipe.predict_proba(Xte)[:, 1]
 
 joblib.dump(pipe, "heart_pipeline.pkl")
 df.to_csv("heart_reference.csv", index=False)
-json.dump({"sklearn": sklearn.__version__, "chol_median": float(chol_med),
-           "roc_auc": float(roc_auc_score(yte, proba)),
-           "report": classification_report(yte, pipe.predict(Xte), output_dict=True),
-           "confusion_matrix": confusion_matrix(yte, pipe.predict(Xte)).tolist()},
-          open("model_metrics.json", "w"), indent=2)
+json.dump(
+    {
+        "sklearn": sklearn.__version__,
+        "chol_median": float(chol_med),
+        "roc_auc": float(roc_auc_score(yte, proba)),
+        "report": classification_report(yte, pipe.predict(Xte), output_dict=True),
+        "confusion_matrix": confusion_matrix(yte, pipe.predict(Xte)).tolist(),
+    },
+    open("model_metrics.json", "w"),
+    indent=2,
+)
 ```
 With a Pipeline the app just passes a raw-valued DataFrame (strings included) — no manual encoding or scaling, so the encoding-mismatch bug disappears. Update `preprocessing.py` accordingly.
 
