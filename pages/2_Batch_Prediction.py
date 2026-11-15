@@ -136,6 +136,8 @@ if uploaded_file is not None:
         plot_bgcolor="rgba(0,0,0,0)",
         legend_title_text="",
     )
+    fig.update_xaxes(showgrid=True, gridcolor="#E2E8F0")
+    fig.update_yaxes(showgrid=True, gridcolor="#E2E8F0")
     st.plotly_chart(
         fig, key="batch_histogram", alt="Batch prediction probability distribution"
     )

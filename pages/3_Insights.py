@@ -52,17 +52,21 @@ else:
             plot_bgcolor="rgba(0,0,0,0)",
             yaxis={"range": [0, 1], "tickformat": ".0%"},
         )
+        fig.update_xaxes(showgrid=True, gridcolor="#E2E8F0")
+        fig.update_yaxes(showgrid=True, gridcolor="#E2E8F0")
         fig.add_hline(
             y=0.30,
             line_dash="dot",
             line_color=COLORS["low"],
             annotation_text="Low/Moderate",
+            annotation_font_color="#15803D",
         )
         fig.add_hline(
             y=0.60,
             line_dash="dot",
             line_color=COLORS["moderate"],
             annotation_text="Moderate/High",
+            annotation_font_color="#B45309",
         )
         st.plotly_chart(fig, key="history_trend", alt="Prediction history trend line")
 

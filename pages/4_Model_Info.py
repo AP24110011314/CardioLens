@@ -10,7 +10,7 @@ import numpy as np
 import plotly.express as px
 import streamlit as st
 
-from src.config import COLORS, ENCODINGS, FEATURES
+from src.config import ENCODINGS, FEATURES
 from src.model_loader import load_artifacts, load_model_metrics, load_reference_data
 from src.ui import render_disclaimer
 
@@ -72,7 +72,7 @@ if metrics is not None:
             labels={"x": "Predicted", "y": "Actual", "color": "Count"},
             x=["No disease", "Heart disease"],
             y=["No disease", "Heart disease"],
-            color_continuous_scale=[[0, COLORS["surface"]], [1, COLORS["primary"]]],
+            color_continuous_scale=[[0, "#EFF6FF"], [1, "#1D4ED8"]],
             text_auto=True,
         )
         fig.update_layout(

@@ -224,7 +224,7 @@ if result is not None and inputs is not None:
                 y="Feature",
                 orientation="h",
                 color="Δ Risk",
-                color_continuous_scale=["#2BB673", "#E6EDF3", "#E5484D"],
+                color_continuous_scale=["#15803D", "#CBD5E1", "#DC2626"],
                 color_continuous_midpoint=0,
             )
             fig.update_layout(
@@ -236,6 +236,10 @@ if result is not None and inputs is not None:
                 showlegend=False,
                 coloraxis_showscale=False,
             )
+            fig.update_xaxes(
+                showgrid=True, gridcolor="#E2E8F0", zerolinecolor="#94A3B8"
+            )
+            fig.update_yaxes(tickfont={"color": "#1E293B", "size": 12})
             st.plotly_chart(fig, key="factors_chart", alt="Key factors bar chart")
             render_disclaimer()
         else:
@@ -364,7 +368,7 @@ if result is not None and inputs is not None:
                         {0: "No disease", 1: "Heart disease"}
                     ),
                     barmode="overlay",
-                    opacity=0.6,
+                    opacity=0.75,
                     color_discrete_map={
                         "No disease": COLORS["low"],
                         "Heart disease": COLORS["high"],
@@ -375,6 +379,7 @@ if result is not None and inputs is not None:
                     x=float(user_val),
                     line_dash="dash",
                     line_color=COLORS["text"],
+                    line_width=2,
                     annotation_text="You",
                     annotation_font_color=COLORS["text"],
                 )
@@ -385,6 +390,8 @@ if result is not None and inputs is not None:
                     plot_bgcolor="rgba(0,0,0,0)",
                     legend_title_text="",
                 )
+                fig.update_xaxes(showgrid=True, gridcolor="#E2E8F0")
+                fig.update_yaxes(showgrid=True, gridcolor="#E2E8F0")
                 st.plotly_chart(
                     fig, key=f"compare_{feat}", alt=f"{feat} distribution comparison"
                 )

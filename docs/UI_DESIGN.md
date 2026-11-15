@@ -18,22 +18,22 @@ Replace the current title `Heart Disease Prediction App by Aman☠️` with a he
 ```toml
 [theme]
 base = "light"
-primaryColor = "#E5484D"
-backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F4F6F8"
-textColor = "#1F2328"
+primaryColor = "#E11D48"
+backgroundColor = "#F8FAFC"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#0F172A"
 font = "sans serif"
 ```
 
 ## 4. Colour tokens
 | Token | Hex | Use |
 |---|---|---|
-| Primary | #E5484D | buttons, accents |
-| Low risk | #2BB673 | badge, gauge low band |
-| Moderate | #F5A524 | badge, gauge mid band |
-| High risk | #E5484D | badge, gauge high band |
-| Surface | #F4F6F8 | cards |
-| Muted text | #656D76 | captions, help |
+| Primary | #E11D48 | buttons, accents |
+| Low risk | #16A34A | badge, gauge low band |
+| Moderate | #D97706 | badge, gauge mid band |
+| High risk | #DC2626 | badge, gauge high band |
+| Surface | #FFFFFF | cards |
+| Muted text | #64748B | captions, help |
 
 Always pair colour with text ("Low risk") and an icon.
 

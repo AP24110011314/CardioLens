@@ -197,14 +197,14 @@ CHOLESTEROL_MEDIAN_FALLBACK: float = 223.0
 # ---------------------------------------------------------------------------
 
 COLORS: dict[str, str] = {
-    "primary": "#E5484D",
-    "low": "#2BB673",
-    "moderate": "#F5A524",
-    "high": "#E5484D",
-    "surface": "#F4F6F8",
-    "muted": "#656D76",
-    "bg": "#FFFFFF",
-    "text": "#1F2328",
+    "primary": "#E11D48",
+    "low": "#16A34A",
+    "moderate": "#D97706",
+    "high": "#DC2626",
+    "surface": "#FFFFFF",
+    "muted": "#64748B",
+    "bg": "#F8FAFC",
+    "text": "#0F172A",
 }
 
 # ---------------------------------------------------------------------------
