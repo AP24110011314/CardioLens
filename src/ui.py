@@ -24,13 +24,13 @@ def inject_custom_css() -> None:
         border-radius: 999px;
         font-weight: 600;
         font-size: 0.95rem;
-        color: #0E1117;
+        color: #FFFFFF;
     }
 
     /* Disclaimer banner */
     .disclaimer {
         font-size: 0.85rem;
-        color: #8B949E;
+        color: #656D76;
         border-left: 3px solid #F5A524;
         padding-left: 0.75rem;
         margin-top: 1rem;
@@ -39,7 +39,7 @@ def inject_custom_css() -> None:
     /* Footer styling */
     .footer {
         text-align: center;
-        color: #8B949E;
+        color: #656D76;
         font-size: 0.8rem;
         padding: 2rem 0 1rem 0;
     }

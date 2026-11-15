@@ -115,19 +115,19 @@ def generate_pdf_report(
     table.setStyle(
         TableStyle(
             [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#161B22")),
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#E5484D")),
                 ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
                 ("FONTSIZE", (0, 0), (-1, -1), 9),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
                 ("TOPPADDING", (0, 0), (-1, -1), 6),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#2A313C")),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#D0D7DE")),
                 (
                     "ROWBACKGROUNDS",
                     (0, 1),
                     (-1, -1),
-                    [colors.HexColor("#0E1117"), colors.HexColor("#161B22")],
+                    [colors.HexColor("#FFFFFF"), colors.HexColor("#F8F9FA")],
                 ),
-                ("TEXTCOLOR", (0, 1), (-1, -1), colors.HexColor("#E6EDF3")),
+                ("TEXTCOLOR", (0, 1), (-1, -1), colors.HexColor("#1F2328")),
             ]
         )
     )
@@ -150,13 +150,19 @@ def generate_pdf_report(
         factor_table.setStyle(
             TableStyle(
                 [
-                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#161B22")),
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#E5484D")),
                     ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
                     ("FONTSIZE", (0, 0), (-1, -1), 9),
                     ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
                     ("TOPPADDING", (0, 0), (-1, -1), 6),
-                    ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#2A313C")),
-                    ("TEXTCOLOR", (0, 1), (-1, -1), colors.HexColor("#E6EDF3")),
+                    ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#D0D7DE")),
+                    (
+                        "ROWBACKGROUNDS",
+                        (0, 1),
+                        (-1, -1),
+                        [colors.HexColor("#FFFFFF"), colors.HexColor("#F8F9FA")],
+                    ),
+                    ("TEXTCOLOR", (0, 1), (-1, -1), colors.HexColor("#1F2328")),
                 ]
             )
         )

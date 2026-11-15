@@ -17,11 +17,11 @@ Replace the current title `Heart Disease Prediction App by Aman☠️` with a he
 ## 3. Theme (`.streamlit/config.toml`)
 ```toml
 [theme]
-base = "dark"
+base = "light"
 primaryColor = "#E5484D"
-backgroundColor = "#0E1117"
-secondaryBackgroundColor = "#161B22"
-textColor = "#E6EDF3"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F4F6F8"
+textColor = "#1F2328"
 font = "sans serif"
 ```
 
@@ -32,8 +32,8 @@ font = "sans serif"
 | Low risk | #2BB673 | badge, gauge low band |
 | Moderate | #F5A524 | badge, gauge mid band |
 | High risk | #E5484D | badge, gauge high band |
-| Surface | #161B22 | cards |
-| Muted text | #8B949E | captions, help |
+| Surface | #F4F6F8 | cards |
+| Muted text | #656D76 | captions, help |
 
 Always pair colour with text ("Low risk") and an icon.
 
