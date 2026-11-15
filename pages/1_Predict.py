@@ -26,7 +26,7 @@ from src.report import generate_pdf_report
 from src.ui import render_badge, render_disclaimer, render_gauge
 
 # ---------------------------------------------------------------------------
-# Session state initialisation
+# Session state initialisation & callbacks
 # ---------------------------------------------------------------------------
 if "history" not in st.session_state:
     st.session_state["history"] = []
@@ -34,6 +34,27 @@ if "last_inputs" not in st.session_state:
     st.session_state["last_inputs"] = None
 if "last_result" not in st.session_state:
     st.session_state["last_result"] = None
+
+# Pre-populate widget state defaults if not already set
+for feat_name, spec in FEATURES.items():
+    key = f"input_{feat_name}"
+    if key not in st.session_state:
+        st.session_state[key] = spec["default"]
+
+if "chol_unknown" not in st.session_state:
+    st.session_state["chol_unknown"] = False
+
+
+def load_example() -> None:
+    """Populate example values into session state before widgets instantiate."""
+    example_inputs = dict(REFERENCE_VALUES)
+    for feat_name, ref_val in example_inputs.items():
+        st.session_state[f"input_{feat_name}"] = ref_val
+    st.session_state["chol_unknown"] = False
+    result = predict_single(example_inputs)
+    st.session_state["last_inputs"] = example_inputs
+    st.session_state["last_result"] = result
+
 
 st.title("Heart disease risk prediction")
 st.caption(
@@ -57,7 +78,6 @@ with form_col:  # noqa: SIM117
                         # "I don't know" checkbox
                         chol_unknown = st.checkbox(
                             "I don't know my cholesterol",
-                            value=False,
                             key="chol_unknown",
                             help="If checked, a typical value from the training data will be used.",
                         )
@@ -72,7 +92,6 @@ with form_col:  # noqa: SIM117
                                 spec["label"],
                                 min_value=spec["min"],
                                 max_value=spec["max"],
-                                value=spec["default"],
                                 help=spec["help"],
                                 key=f"input_{feat_name}",
                             )
@@ -81,7 +100,6 @@ with form_col:  # noqa: SIM117
                             spec["label"],
                             min_value=spec["min"],
                             max_value=spec["max"],
-                            value=spec["default"],
                             help=spec["help"],
                             key=f"input_{feat_name}",
                         )
@@ -90,7 +108,6 @@ with form_col:  # noqa: SIM117
                             "label": spec["label"],
                             "min_value": spec["min"],
                             "max_value": spec["max"],
-                            "value": spec["default"],
                             "help": spec["help"],
                             "key": f"input_{feat_name}",
                         }
@@ -101,9 +118,6 @@ with form_col:  # noqa: SIM117
                         st.selectbox(
                             spec["label"],
                             options=spec["options"],
-                            index=spec["options"].index(spec["default"])
-                            if spec["default"] in spec["options"]
-                            else 0,
                             help=spec["help"],
                             key=f"input_{feat_name}",
                         )
@@ -391,7 +405,4 @@ else:
                 "Fill in the form and click **Predict risk** to see your estimated heart disease risk."
             )
 
-            if st.button("Try an example", key="example_btn"):
-                for feat_name, ref_val in REFERENCE_VALUES.items():
-                    st.session_state[f"input_{feat_name}"] = ref_val
-                st.rerun()
+            st.button("Try an example", key="example_btn", on_click=load_example)
