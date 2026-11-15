@@ -1,84 +1,79 @@
-# CardioLens — Heart Disease Risk Prediction App
+# ❤️ CardioLens — Heart Disease Risk Prediction
 
-A Streamlit web app that estimates the likelihood of heart disease from 11 clinical inputs, using a K-Nearest Neighbors model trained in Google Colab.
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://cardiolenspro.streamlit.app)
+[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
+[![scikit-learn 1.6.1](https://img.shields.io/badge/scikit--learn-1.6.1-orange.svg)](https://scikit-learn.org/)
 
-> ⚠️ **Educational project. Not a medical device and not a diagnosis.** Always consult a qualified doctor.
+**CardioLens** is an interactive clinical ML web application that estimates heart disease risk probability from 11 standard health inputs using a K-Nearest Neighbors (KNN) model trained on the Kaggle Heart Failure Prediction Dataset.
 
-## Features
-- **Guided input form**: Friendly labels, validated ranges, and "I don't know" cholesterol handling.
-- **Risk probability**: Plotly gauge, risk band (Low, Moderate, High), and plain-language summary.
-- **Explainability**: Key-factor sensitivity breakdown and interactive what-if sliders.
-- **Similar patients**: k-nearest reference cases with true outcomes.
-- **Batch prediction**: Upload CSV, validate schema and ranges, download scored dataset.
-- **Session history**: Local session prediction log, trend chart, and CSV export.
-- **PDF report**: ReportLab one-page downloadable summary.
-- **Model Info**: Architecture, hyperparameters, confusion matrix, limitations.
-- **Dark theme & responsive**: Built for desktop and mobile.
+🔗 **Live Application**: [https://cardiolenspro.streamlit.app](https://cardiolenspro.streamlit.app)
 
-## Tech Stack
-Python 3.13 · Streamlit · scikit-learn 1.6.1 · pandas · joblib · Plotly · ReportLab
+> ⚠️ **Disclaimer**: *CardioLens is an educational and portfolio project. It is not a certified medical device and does not provide clinical diagnoses or treatment advice. Always consult a licensed healthcare professional.*
 
-## Project Structure
-```
-HeartDisease/
-├── app.py                    # entry point: page config & navigation
-├── pages/
-│   ├── 1_Predict.py          # form + result + what-if / similar / compare tabs
-│   ├── 2_Batch_Prediction.py # batch CSV upload & download
-│   ├── 3_Insights.py         # session history & trend
-│   ├── 4_Model_Info.py       # model metrics & limitations
-│   └── 5_About.py            # medical background & credits
-├── src/
-│   ├── config.py             # central specs, encodings, ranges, risk bands
-│   ├── model_loader.py       # cached loaders for model/scaler/columns/metrics
-│   ├── preprocessing.py      # build_frame, impute, encode, scale
-│   ├── predict.py            # predict_single, predict_batch, risk bands
-│   ├── explain.py            # sensitivity, what-if, neighbours
-│   ├── report.py             # PDF generation
-│   └── ui.py                 # custom CSS, gauge, badge, disclaimer
-├── models/                   # KNN_heart.pkl, scaler.pkl, columns.pkl
-├── data/                     # heart_reference.csv, model_metrics.json (exported from Colab)
-├── tests/                    # pytest test suite
-├── docs/                     # PRD, Architecture, UI design, features, model notes
-├── .streamlit/config.toml    # dark theme configuration
-└── requirements.txt
-```
+---
 
-## Setup & Run
+## 🌟 Key Features
 
+- **Guided Risk Assessment**: Grouped clinical input form with plain-language labels, tooltips, and validated physical ranges.
+- **Missing Value Handling**: Handles missing cholesterol ("I don't know") with dataset median imputation.
+- **Probabilistic Scoring**: Visual Plotly risk gauge mapped to **Low**, **Moderate**, and **High** risk bands.
+- **Explainable AI (XAI)**:
+  - *Key Factors*: Sensitivity breakdown comparing patient inputs against healthy reference baselines.
+  - *What-If Analysis*: Real-time interactive sliders showing how lifestyle adjustments impact risk.
+  - *Similar Patients*: Nearest reference neighbor lookup with true clinical outcomes.
+  - *Population Comparison*: Distribution histograms comparing patient parameters to dataset distributions.
+- **Batch CSV Scoring**: Upload tabular patient cohorts, validate schemas, score, and download enriched CSVs.
+- **Downloadable Clinical Report**: Generates a one-page PDF risk summary via ReportLab.
+- **Session History**: Track predictions within your session with interactive trend charts and CSV export.
+- **Model Transparency**: Dedicated Model Info page detailing architecture, ROC-AUC, confusion matrix, and clinical limitations.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend / Framework**: [Streamlit](https://streamlit.io/)
+- **Machine Learning**: [scikit-learn 1.6.1](https://scikit-learn.org/) (KNeighborsClassifier, StandardScaler)
+- **Data & Computing**: pandas, numpy, joblib
+- **Visualization**: Plotly Express & Plotly Graph Objects
+- **Reporting**: ReportLab (PDF generation)
+- **Quality & Testing**: pytest, ruff
+
+---
+
+## 🚀 Quickstart (Run Locally)
+
+### 1. Clone the repository
 ```bash
-# 1. Clone & create Python 3.13 venv
-git clone <your-repo-url> && cd HeartDisease
+git clone https://github.com/AP24110011314/CardioLens.git
+cd CardioLens
+```
+
+### 2. Set up virtual environment
+```bash
 python3.13 -m venv .venv
 source .venv/bin/activate
-
-# 2. Install dependencies
 pip install -r requirements.txt
-
-# 3. Run the app
-streamlit run app.py
 ```
 
-## Running Tests
+### 3. Launch the app
+```bash
+streamlit run app.py
+```
+Open [http://localhost:8501](http://localhost:8501) in your browser.
+
+---
+
+## 🧪 Running Tests
+
+CardioLens includes a 60-test pytest suite covering data validation, encodings, probability calibrations, explainability, reports, and page smoke tests:
 
 ```bash
 pytest -q
 ```
 
-## Model & Data
-- Dataset: *Heart Failure Prediction Dataset* (fedesoriano, Kaggle, 2021) — 918 records, 11 features, merged from five public cardiology datasets (Cleveland, Hungarian, Switzerland, Long Beach VA, Statlog).
-- See `docs/MODEL_NOTES.md` for architecture details, limitations, and retraining instructions.
+---
 
-## Documentation Index
-| Document | Content |
-|---|---|
-| [docs/PRD.md](docs/PRD.md) | Product requirements, personas, scope |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Architecture, data flow, module contracts |
-| [docs/UI_DESIGN.md](docs/UI_DESIGN.md) | Design system, tokens, layout, copy table |
-| [docs/FEATURES.md](docs/FEATURES.md) | Feature specifications & acceptance criteria |
-| [docs/MODEL_NOTES.md](docs/MODEL_NOTES.md) | Model details, fixes, retraining pipeline |
-| [docs/TASKS.md](docs/TASKS.md) | Implementation checklist |
-| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Streamlit Cloud deployment guide |
+## 📊 Dataset & Credits
 
-## Credits
-Built by Aman. Dataset: fedesoriano (2021), Heart Failure Prediction Dataset, Kaggle.
+- **Dataset**: *Heart Failure Prediction Dataset* (fedesoriano, Kaggle, 2021) — 918 records across 11 features, merging five public cardiology cohorts (Cleveland, Hungarian, Switzerland, Long Beach VA, and Statlog).
+- **Developed by**: Aman ([GitHub Profile](https://github.com/AP24110011314))
