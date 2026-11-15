@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from src.explain import sensitivity_analysis, what_if
+from src.explain import find_neighbours, sensitivity_analysis, what_if
 from src.predict import predict_single
 
 
@@ -45,3 +45,10 @@ class TestExplain:
         assert wi["delta"] == pytest.approx(
             wi["modified_proba"] - wi["original_proba"], abs=1e-5
         )
+
+    def test_find_neighbours_returns_k_rows(self, sample_inputs: dict) -> None:
+        neighbours = find_neighbours(sample_inputs, k=5)
+        assert neighbours is not None
+        assert len(neighbours) == 5
+        assert "Distance" in neighbours.columns
+        assert "HeartDisease" in neighbours.columns

@@ -43,3 +43,28 @@ class TestAppPages:
     def test_about_page_loads(self) -> None:
         at = AppTest.from_file(str(ROOT / "pages/5_About.py"), default_timeout=30).run()
         assert not at.exception
+
+    def test_predict_example_button(self) -> None:
+        at = AppTest.from_file(
+            str(ROOT / "pages/1_Predict.py"), default_timeout=30
+        ).run()
+        assert not at.exception
+        at.button(key="example_btn").click().run()
+        assert not at.exception
+        assert at.session_state["last_result"] is not None
+        assert "proba" in at.session_state["last_result"]
+        assert "band" in at.session_state["last_result"]
+
+    def test_predict_form_submission(self) -> None:
+        at = AppTest.from_file(
+            str(ROOT / "pages/1_Predict.py"), default_timeout=30
+        ).run()
+        assert not at.exception
+        # Click form submit button
+        for b in at.button:
+            if "Predict" in b.label:
+                b.click().run()
+                break
+        assert not at.exception
+        assert at.session_state["last_result"] is not None
+        assert len(at.session_state["history"]) >= 1

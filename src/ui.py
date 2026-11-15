@@ -71,6 +71,52 @@ def inject_custom_css() -> None:
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     }
 
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+        .block-container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 2rem !important;
+        }
+
+        h1 {
+            font-size: 1.6rem !important;
+        }
+        h2 {
+            font-size: 1.3rem !important;
+        }
+        h3, h4, h5 {
+            font-size: 1.1rem !important;
+        }
+
+        /* Touch-friendly full-width action buttons */
+        div[data-testid="stFormSubmitButton"] > button,
+        div[data-testid="stDownloadButton"] > button,
+        div.stButton > button {
+            width: 100% !important;
+            min-height: 44px !important;
+        }
+
+        /* Compact cards on mobile */
+        div[data-testid="stContainer"] {
+            padding: 0.75rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+
+        /* Metric card readability on small screens */
+        div[data-testid="stMetricValue"] {
+            font-size: 1.35rem !important;
+        }
+        div[data-testid="stMetricLabel"] {
+            font-size: 0.8rem !important;
+        }
+
+        .js-plotly-plot, .plot-container {
+            max-width: 100% !important;
+        }
+    }
+
     /* Footer styling */
     .footer {
         text-align: center;
@@ -133,8 +179,9 @@ def render_gauge(probability: float, band: str, colour: str) -> go.Figure:
         )
     )
     fig.update_layout(
-        height=250,
-        margin={"t": 40, "b": 10, "l": 30, "r": 30},
+        autosize=True,
+        height=240,
+        margin={"t": 35, "b": 10, "l": 20, "r": 20},
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font={"color": "#0F172A"},

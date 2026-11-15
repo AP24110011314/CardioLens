@@ -11,7 +11,7 @@ st.set_page_config(
     page_title="CardioLens",
     page_icon="❤️",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 from src.ui import inject_custom_css, render_footer

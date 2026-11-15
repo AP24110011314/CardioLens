@@ -68,7 +68,12 @@ else:
             annotation_text="Moderate/High",
             annotation_font_color="#B45309",
         )
-        st.plotly_chart(fig, key="history_trend", alt="Prediction history trend line")
+        st.plotly_chart(
+            fig,
+            key="history_trend",
+            alt="Prediction history trend line",
+            config={"responsive": True, "displayModeBar": False},
+        )
 
     # Data table
     st.dataframe(

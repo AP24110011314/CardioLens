@@ -80,7 +80,12 @@ if metrics is not None:
             margin={"l": 10, "r": 10, "t": 10, "b": 10},
             paper_bgcolor="rgba(0,0,0,0)",
         )
-        st.plotly_chart(fig, key="confusion_matrix", alt="Confusion matrix heatmap")
+        st.plotly_chart(
+            fig,
+            key="confusion_matrix",
+            alt="Confusion matrix heatmap",
+            config={"responsive": True, "displayModeBar": False},
+        )
 
     # sklearn version
     sk_ver = metrics.get("sklearn")

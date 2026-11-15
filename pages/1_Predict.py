@@ -172,7 +172,12 @@ if result is not None and inputs is not None:
     with result_col:
         with st.container(border=True):
             gauge_fig = render_gauge(result["proba"], result["band"], result["colour"])
-            st.plotly_chart(gauge_fig, key="gauge_chart", alt="Risk probability gauge")
+            st.plotly_chart(
+                gauge_fig,
+                key="gauge_chart",
+                alt="Risk probability gauge",
+                config={"responsive": True, "displayModeBar": False},
+            )
 
             render_badge(result["band"], result["colour"])
             st.markdown(result["message"])
@@ -240,7 +245,12 @@ if result is not None and inputs is not None:
                 showgrid=True, gridcolor="#E2E8F0", zerolinecolor="#94A3B8"
             )
             fig.update_yaxes(tickfont={"color": "#1E293B", "size": 12})
-            st.plotly_chart(fig, key="factors_chart", alt="Key factors bar chart")
+            st.plotly_chart(
+                fig,
+                key="factors_chart",
+                alt="Key factors bar chart",
+                config={"responsive": True, "displayModeBar": False},
+            )
             render_disclaimer()
         else:
             st.info(
@@ -361,12 +371,18 @@ if result is not None and inputs is not None:
                 if user_val is None or (feat == "Cholesterol" and user_val == 0):
                     continue
 
+                plot_df = (
+                    ref_df[ref_df[feat] > 0].copy()
+                    if feat == "Cholesterol"
+                    else ref_df.copy()
+                )
+                plot_df["Outcome"] = plot_df["HeartDisease"].map(
+                    {0: "No disease", 1: "Heart disease"}
+                )
                 fig = px.histogram(
-                    ref_df[ref_df[feat] > 0] if feat == "Cholesterol" else ref_df,
+                    plot_df,
                     x=feat,
-                    color=ref_df["HeartDisease"].map(
-                        {0: "No disease", 1: "Heart disease"}
-                    ),
+                    color="Outcome",
                     barmode="overlay",
                     opacity=0.75,
                     color_discrete_map={
@@ -393,7 +409,10 @@ if result is not None and inputs is not None:
                 fig.update_xaxes(showgrid=True, gridcolor="#E2E8F0")
                 fig.update_yaxes(showgrid=True, gridcolor="#E2E8F0")
                 st.plotly_chart(
-                    fig, key=f"compare_{feat}", alt=f"{feat} distribution comparison"
+                    fig,
+                    key=f"compare_{feat}",
+                    alt=f"{feat} distribution comparison",
+                    config={"responsive": True, "displayModeBar": False},
                 )
             render_disclaimer()
         else:

@@ -139,7 +139,10 @@ if uploaded_file is not None:
     fig.update_xaxes(showgrid=True, gridcolor="#E2E8F0")
     fig.update_yaxes(showgrid=True, gridcolor="#E2E8F0")
     st.plotly_chart(
-        fig, key="batch_histogram", alt="Batch prediction probability distribution"
+        fig,
+        key="batch_histogram",
+        alt="Batch prediction probability distribution",
+        config={"responsive": True, "displayModeBar": False},
     )
 
     # Data table
