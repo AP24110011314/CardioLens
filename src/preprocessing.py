@@ -12,21 +12,55 @@ import pandas as pd
 from src.config import ENCODINGS, FEATURE_ORDER
 from src.model_loader import get_cholesterol_median
 
+KAGGLE_ALIASES: dict[str, dict[str, str]] = {
+    "Sex": {"M": "Male", "F": "Female"},
+    "ChestPainType": {
+        "TA": "Typical angina",
+        "ATA": "Atypical angina",
+        "NAP": "Non-anginal pain",
+        "ASY": "No symptoms (asymptomatic)",
+    },
+    "RestingECG": {
+        "LVH": "Left ventricular hypertrophy",
+        "Normal": "Normal",
+        "ST": "ST-T wave abnormality",
+    },
+    "ExerciseAngina": {"N": "No", "Y": "Yes"},
+    "ST_Slope": {"Down": "Downsloping", "Flat": "Flat", "Up": "Upsloping"},
+}
 
-def encode_value(feature: str, label: str) -> int:
-    """Encode a friendly label to the integer the model expects.
+
+def encode_value(feature: str, label: Any) -> int:
+    """Encode a friendly label, Kaggle code, or integer to the integer the model expects.
 
     Raises ValueError if the label is not found in the encoding map.
     """
     mapping = ENCODINGS.get(feature)
     if mapping is None:
         raise ValueError(f"No encoding map for feature '{feature}'.")
-    if label not in mapping:
-        raise ValueError(
-            f"Unknown label '{label}' for feature '{feature}'. "
-            f"Valid labels: {list(mapping.keys())}"
-        )
-    return mapping[label]
+
+    # If already an integer or integer-like matching valid codes
+    try:
+        val_int = int(label)
+        if val_int in mapping.values():
+            return val_int
+    except (ValueError, TypeError):
+        pass
+
+    # Direct label lookup
+    if label in mapping:
+        return mapping[label]
+
+    # Check Kaggle aliases
+    str_val = str(label).strip()
+    alias = KAGGLE_ALIASES.get(feature, {}).get(str_val)
+    if alias and alias in mapping:
+        return mapping[alias]
+
+    raise ValueError(
+        f"Unknown label '{label}' for feature '{feature}'. "
+        f"Valid labels: {list(mapping.keys())}"
+    )
 
 
 def decode_value(feature: str, code: int) -> str:
@@ -124,15 +158,34 @@ def prepare_batch(
 ) -> tuple[pd.DataFrame, list[str]]:
     """Validate and prepare a batch DataFrame for prediction.
 
+    Supports friendly labels, Kaggle shorthand codes, or raw integer codes.
     Returns (prepared_df, errors) where errors is a list of issue descriptions.
     """
     errors: list[str] = []
+    df = df.copy()
 
     # Check required columns
     missing = [c for c in FEATURE_ORDER if c not in df.columns]
     if missing:
         errors.append(f"Missing columns: {', '.join(missing)}")
         return df, errors
+
+    # Encode categorical columns
+    for col in ENCODINGS:
+        if col in df.columns:
+            encoded_vals: list[int] = []
+            col_has_err = False
+            for idx, val in enumerate(df[col]):
+                try:
+                    encoded_vals.append(encode_value(col, val))
+                except (ValueError, TypeError):
+                    errors.append(
+                        f"Row {idx + 1}: Invalid value '{val}' in column '{col}'."
+                    )
+                    col_has_err = True
+                    break
+            if not col_has_err:
+                df[col] = encoded_vals
 
     # Coerce numeric types
     numeric_cols = ["Age", "RestingBP", "Cholesterol", "MaxHR", "Oldpeak"]
