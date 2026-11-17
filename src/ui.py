@@ -71,23 +71,40 @@ def inject_custom_css() -> None:
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     }
 
+    /* Streamlit top header bar matching light background */
+    header[data-testid="stHeader"] {
+        background-color: rgba(248, 250, 252, 0.95) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+    }
+
     /* Mobile responsive adjustments */
     @media (max-width: 768px) {
         .block-container {
             padding-left: 1rem !important;
             padding-right: 1rem !important;
-            padding-top: 1.5rem !important;
-            padding-bottom: 2rem !important;
+            padding-top: 5rem !important;
+            padding-bottom: 2.5rem !important;
         }
 
-        h1 {
-            font-size: 1.6rem !important;
+        h1,
+        .stHeading h1,
+        div[data-testid="stHeadingWithActionElements"] h1,
+        [data-testid="stMarkdownContainer"] h1 {
+            font-size: 1.65rem !important;
+            line-height: 1.25 !important;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.4rem !important;
         }
-        h2 {
-            font-size: 1.3rem !important;
+        h2,
+        .stHeading h2,
+        div[data-testid="stHeadingWithActionElements"] h2 {
+            font-size: 1.35rem !important;
         }
-        h3, h4, h5 {
-            font-size: 1.1rem !important;
+        h3, h4, h5,
+        .stHeading h3,
+        div[data-testid="stHeadingWithActionElements"] h3 {
+            font-size: 1.15rem !important;
         }
 
         /* Touch-friendly full-width action buttons */
